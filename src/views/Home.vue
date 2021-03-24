@@ -18,20 +18,26 @@
       image url:
       <input type="text" v-model="newProductImageUrl" />
     </p>
-    <button v-on:click="productsCreate">Create the product</button>
+    <button v-on:click="productsCreate">Add (create) a new product!</button>
     <hr />
-    <button v-on:click="productsIndex">Get the Index</button>
+    <h3>See current products</h3>
+    <button v-on:click="productsIndex">See all products!</button>
     <div v-for="product in products" v-bind:key="product.id">
       <p>{{ product.name }}</p>
       <p><button v-on:click="productShow(product)">More Info</button></p>
       <img v-bind:src="product.image_url" />
     </div>
     <dialog id="product-details">
-      <h2>Here will be some info</h2>
-      <p>Title: (currentProduct.title)</p>
-      <p>Price: (currentProduct.price)</p>
-      <p>Description: (currentProduct.description)</p>
+      <form method="dialog">
+        <h2>Here will be some info</h2>
+        <p>Name: {{ currentProduct.name }}</p>
+        <p>Price: {{ currentProduct.price }}</p>
+        <p>Description: {{ currentProduct.description }}</p>
+        <button>Close</button>
+      </form>
     </dialog>
+    <hr />
+    <button v-on:click="productsArray">See the products array</button>
   </div>
 </template>
 <style>
@@ -45,7 +51,7 @@ import axios from "axios";
 export default {
   data: function () {
     return {
-      message: "The brave new world of View.js! ...",
+      message: "Using only a .vue file to access the backend ...",
       products: [],
       newProductName: "",
       newProductPrice: "",
@@ -83,13 +89,18 @@ export default {
         this.newProductPrice = "";
         this.newProductDescription = "";
         this.newProductImageUrl = "";
+        // console.log(this.products);
       });
     },
     productShow: function (theProduct) {
       console.log("showing product ...");
       console.log(theProduct);
-      document.querySelector("#product-details").showModal();
       this.currentProduct = theProduct;
+      document.querySelector("#product-details").showModal(); //querySelector is vanialla, or raw js - it's "outside of vue" (whatever that means) and selects a specified html element ... the #product-details was established above as an id, and it's nested text, logic etc will be shown in the modal. Also, note, that product-details is kabob case bc that's what CSS elements are written in
+      this.currentProduct = theProduct;
+    },
+    productsArray: function () {
+      console.log(this.products);
     },
   },
 };
